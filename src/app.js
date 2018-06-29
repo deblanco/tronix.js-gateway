@@ -25,18 +25,7 @@ app.use((req, res, next) => {
 
 app.use('/:route', async (req, res) => {
   if (tronRouter.isRoute(req.params.route)) {
-    try {
-      const request = await tronRouter.execRequest(req.params.route);
-      res.json({
-        successful: true,
-        response: request
-      });
-    } catch (err) {
-      res.json({
-        successful: false,
-        message: err.toString()
-      })
-    }
+    return handleRequest(res, tronRouter.execRequest(req.params.route));
   } else {
     res.json({
       successful: false,
@@ -62,6 +51,22 @@ app.use('/*', (req, res) => {
     </html>
   `);
 });
+
+const handleRequest = (res, promise) => {
+  return promise
+    .then(data => {
+      res.json({
+        successful: true,
+        response: data
+      });
+    })
+    .catch(err => {
+      res.json({
+        successful: false,
+        response: err.toString()
+      })
+    });
+};
 
 app.listen(3000, () => {
   console.log('Listening on port 3000!');
