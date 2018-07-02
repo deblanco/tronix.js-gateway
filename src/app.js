@@ -45,27 +45,26 @@ app.use('/*', (req, res) => {
         <ul>
           ${tronRouter.methods.map(method => {
             return `<li><a href="/${method}">${method}</a></li>`;
-          }).join('\n')}
+          }).sort().join('\n')}
         </ul>
       </body>
     </html>
   `);
 });
 
-const handleRequest = (res, promise) => {
-  return promise
-    .then(data => {
-      res.json({
-        successful: true,
-        response: data
-      });
-    })
-    .catch(err => {
-      res.json({
-        successful: false,
-        response: err.toString()
-      })
+const handleRequest = async (res, promise) => {
+  try {
+    const data = await promise();
+    res.json({
+      successful: true,
+      response: data
     });
+  } catch(err) {
+    res.json({
+      successful: false,
+      response: err.toString()
+    })
+  }
 };
 
 app.listen(3000, () => {

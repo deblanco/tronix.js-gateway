@@ -14,10 +14,13 @@ class TronRouter {
     });
 
     // read methods available
-    this.methods = [
-      ...Object.getOwnPropertyNames(GrpcClient.prototype),
-      ...Object.getOwnPropertyNames(SolidityGrpcClient.prototype)
-    ].filter(prop => prop !== 'constructor');
+    this.methods = Array.from(
+      new Set([
+        ...Object.getOwnPropertyNames(GrpcClient.prototype),
+        ...Object.getOwnPropertyNames(SolidityGrpcClient.prototype)
+      ])
+    )
+    .filter(prop => prop !== 'constructor');
   }
 
   isRoute(path) {
@@ -26,9 +29,9 @@ class TronRouter {
 
   execRequest(path) {
     if (this.client[path]) {
-      return this.client[path]();
+      return this.client[path];
     } else if (this.solidityClient[path]) {
-      return this.solidityClient[path]();
+      return this.solidityClient[path];
     }
   }
   

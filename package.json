@@ -14,6 +14,6 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "morgan": "^1.9.0",
-    "tronix.js": "0.0.1"
+    "tronix.js": "0.0.2"
   }
 }
